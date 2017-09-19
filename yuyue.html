@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="format-detection" content="email=no">
+		<title>来访预约</title>
+		<link href="style/css/bootstrap.min.css" rel="stylesheet">
+		<link href="style/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+		<link href="style/css/style.css" rel="stylesheet">
+		<link href="style/css/font-awesome.min.css" rel="stylesheet">
+		<script src="style/js/jquery.min.js"></script>
+		<script src="style/js/bootstrap.min.js"></script>
+		<script src="style/js/bootstrap-datetimepicker.min.js"></script>
+		<script src="style/js/bootstrap-datetimepicker.zh-CN.js"></script>
+	</head>
+
+<body style="background: url(style/img/common/bg.jpg) repeat-x;">
+	<div class="list-top login-top">
+	<a href="javascript:window.history.go(-1)" class="list-top-back"><img src="style/img/common/list-top-back1.png"></a>
+	<div class="list-top-title">预约申请</div>
+	<!--<a href="#" class="list-top-more"><img src="style/img/common/list-top-back.png"></a>-->
+	</div>
+		<div class="container top64">
+			<div class="logo"><img src="style/img/common/logo.png"></div>
+			<form class="yuyue-biaodan form-horizontal" role="form">
+				<div class="yuyue-phone form-group">
+					<lable for="yuyue-phone">访问人电话：</lable>
+					<input name="yuyue-phone" id="yuyue-phone" type="text" placeholder="请输入访问人的手机号" class="form-control">
+				</div>
+				<div class="yuyue-time form-group">
+					<lable for="yuyue-time">开始时间：</lable>
+					<input name="yuyue-timestart" id="date_begin" type="text" placeholder="请选择预约开始时间" readonly class="form_datetimestart form-control">
+				</div>
+				<div class="yuyue-time form-group">
+					<lable for="yuyue-timeend">截止时间：</lable>
+					<input name="yuyue-timeend" id="date_end" type="text" placeholder="请选择预约截止时间" disabled class="form_datetimeend form-control">
+				</div>
+				
+				<button type="submit" id="bt_sure">提交</button>
+			</form>
+		</div>
+		<script type="text/javascript">
+			 var myreg =/^1[34578]\d{9}$/;
+
+		    $("#yuyue-phone").bind("input propertychange", function () {
+			 var username = document.getElementById("yuyue-phone").value;
+		       
+		        if (!myreg.test(username)) {
+		        	document.getElementById("yuyue-phone").setAttribute("style", "border: 1px solid red");
+		        	document.getElementById("date_begin").setAttribute("disabled", true);
+		            document.getElementById("bt_sure").setAttribute("disabled", true);
+		            document.getElementById("bt_sure").setAttribute("style","background: #ccc");
+		        } else {
+		        	document.getElementById("yuyue-phone").removeAttribute("style");
+		            document.getElementById("date_begin").removeAttribute("disabled");
+		        }
+		    });
+		    var username = document.getElementById("yuyue-phone").value;
+		    window.onload=function(){
+		    	if(username==""){
+		    		document.getElementById("yuyue-phone").setAttribute("style", "border: 1px solid #3bc3f3");
+		    		document.getElementById("date_begin").setAttribute("disabled", true);
+		            document.getElementById("bt_sure").setAttribute("disabled", true);
+		            document.getElementById("bt_sure").setAttribute("style","background: #ccc");
+		    	}
+		    }
+		</script>
+
+		
+		<script type="text/javascript">
+			var iselect=false;
+			var newDate = new Date();
+			var t = newDate.toJSON();
+			$('.form_datetimestart').datetimepicker({
+				format: "yyyy-mm-dd hh:ii:00",
+				startDate: new Date(t),
+				language: 'zh-CN',
+				weekStart: 1,
+				todayBtn: 1,
+				autoclose: 1,
+				todayHighlight: 1,
+				startView: 2,
+				forceParse: 0,
+				showMeridian: 1
+			}).on('changeDate', function(ev) {
+				iselect=true;
+				if(!iselect){
+					document.getElementById("bt_sure").setAttribute("disabled", true);
+		            document.getElementById("bt_sure").setAttribute("style","background: #ccc");
+				}else{
+					document.getElementById("bt_sure").removeAttribute("disabled");
+		            document.getElementById("bt_sure").removeAttribute("style","background: #3bc3f3");
+				}
+				var datetime = $("#date_begin").val();
+				var firstdate = new Date(datetime);
+				var endtime = firstdate.getTime() + 60 * 60 * 1000;
+				var sdate=new Date(endtime).format("yyyy-MM-dd hh:mm:ss");
+				$("#date_end").val(sdate.toLocaleString())
+			});
+			
+			Date.prototype.format =function(format)
+				{
+				var o = {
+				"M+" : this.getMonth()+1, //month
+				"d+" : this.getDate(), //day
+				"h+" : this.getHours(), //hour
+				"m+" : this.getMinutes(), //minute
+				"s+" : this.getSeconds(), //second
+				"q+" : Math.floor((this.getMonth()+3)/3), //quarter
+				"S" : this.getMilliseconds() //millisecond
+				}
+				if(/(y+)/.test(format)) format=format.replace(RegExp.$1,
+				(this.getFullYear()+"").substr(4- RegExp.$1.length));
+				for(var k in o)if(new RegExp("("+ k +")").test(format))
+				format = format.replace(RegExp.$1,
+				RegExp.$1.length==1? o[k] :
+				("00"+ o[k]).substr((""+ o[k]).length));
+				return format;
+				}
+		</script>
+	</body>
+
+</html>
